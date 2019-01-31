@@ -56,7 +56,7 @@ level2estimate = Node(EstimateModel(estimation_method={'Classical': 1}),
 # EstimateContrast - estimates simple group contrast
 level2conestimate = Node(EstimateContrast(group_contrast=True),
                          name="level2conestimate")
-cont1 = ['Group', 'T', ['mean'], [-1, 1]]
+cont1 = ['Eq range vs Eq indiff in loss', 'T', ['mean'], [1, -1]]
 level2conestimate.inputs.contrasts = [cont1]
 
 # Create the 2nd level pipeline
@@ -68,10 +68,10 @@ secondlev.connect([
     (infosource, selectderivs, [('contrast_id', 'contrast_id')]),
     (selectderivs, twosampttest, [('cons_eqrng', 'group1_files'),
                                   ('cons_eqind', 'group2_files')]),
-    # (twosampttest, level2estimate, [('spm_mat_file', 'spm_mat_file')]),
-    # (level2estimate, level2conestimate, [('spm_mat_file', 'spm_mat_file'),
-    #                                      ('beta_images', 'beta_images'),
-    #                                      ('residual_image', 'residual_image')])
+    (twosampttest, level2estimate, [('spm_mat_file', 'spm_mat_file')]),
+    (level2estimate, level2conestimate, [('spm_mat_file', 'spm_mat_file'),
+                                         ('beta_images', 'beta_images'),
+                                         ('residual_image', 'residual_image')])
 ])
 
 
